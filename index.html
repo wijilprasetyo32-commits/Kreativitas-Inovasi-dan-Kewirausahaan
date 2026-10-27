@@ -1,0 +1,1936 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBT - Kreativitas, Inovasi & Kewirausahaan Elektronika</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased">
+
+    <!-- Header Navigation -->
+    <header class="bg-slate-900 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-brand-600 p-2 rounded-lg">
+                    <i data-lucide="cpu" class="w-6 h-6 text-white"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">CBT Entrepreneurship & Innovation</h1>
+                    <p class="text-xs text-slate-400">SMK Teknik Elektronika - SAS Genap 2026/2027</p>
+                </div>
+            </div>
+            
+            <nav class="hidden md:flex items-center space-x-2">
+                <button onclick="switchTab('exam')" id="nav-exam" class="px-4 py-2 rounded-md text-sm font-medium transition-colors bg-brand-600 text-white">
+                    <i data-lucide="edit-3" class="w-4 h-4 inline mr-1.5"></i>Ujian CBT
+                </button>
+                <button onclick="switchTab('bank')" id="nav-bank" class="px-4 py-2 rounded-md text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-colors">
+                    <i data-lucide="book-open" class="w-4 h-4 inline mr-1.5"></i>Bank Soal & Kunci
+                </button>
+                <button onclick="switchTab('rubric')" id="nav-rubric" class="px-4 py-2 rounded-md text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-colors">
+                    <i data-lucide="award" class="w-4 h-4 inline mr-1.5"></i>Kriteria Penilaian
+                </button>
+                <button onclick="switchTab('admin')" id="nav-admin" class="hidden px-4 py-2 rounded-md text-sm font-medium text-amber-300 hover:text-white hover:bg-slate-800 transition-colors">
+                    <i data-lucide="shield-check" class="w-4 h-4 inline mr-1.5"></i>Panel Admin
+                </button>
+            </nav>
+
+            <!-- User Info / Auth Controls -->
+            <div class="hidden md:flex items-center space-x-3 border-l border-slate-700 pl-4">
+                <div id="user-profile-badge" class="hidden flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-full bg-brand-600 flex items-center justify-center font-bold text-xs" id="user-avatar font-bold">U</div>
+                    <div class="text-xs">
+                        <p class="font-semibold leading-none text-slate-200" id="user-display-name">Siswa</p>
+                        <p class="text-[10px] text-brand-400 capitalize" id="user-display-role">Peserta</p>
+                    </div>
+                </div>
+                <button id="btn-login-modal" onclick="showLoginModal()" class="px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-xs font-semibold text-white flex items-center">
+                    <i data-lucide="log-in" class="w-3.5 h-3.5 mr-1.5"></i>Login
+                </button>
+                <button id="btn-logout" onclick="logoutUser()" class="hidden px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-xs font-semibold text-white flex items-center">
+                    <i data-lucide="log-out" class="w-3.5 h-3.5 mr-1.5"></i>Logout
+                </button>
+            </div>
+
+            <div class="flex items-center space-x-2 md:hidden">
+                <button id="mobile-menu-btn" class="p-2 rounded-lg bg-slate-800 text-slate-300">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Navigation Drawer -->
+        <div id="mobile-menu" class="hidden md:hidden bg-slate-800 px-4 pt-2 pb-4 space-y-2">
+            <button onclick="switchTab('exam')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white bg-brand-600">
+                Ujian CBT
+            </button>
+            <button onclick="switchTab('bank')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:bg-slate-700">
+                Bank Soal & Kunci
+            </button>
+            <button onclick="switchTab('rubric')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:bg-slate-700">
+                Kriteria Penilaian
+            </button>
+            <button onclick="switchTab('admin')" id="mobile-nav-admin" class="hidden block w-full text-left px-3 py-2 rounded-md text-base font-medium text-amber-300 hover:bg-slate-700">
+                Panel Admin
+            </button>
+            <div class="pt-2 border-t border-slate-700 flex justify-between items-center">
+                <span id="mobile-user-name" class="text-xs text-slate-300">Belum Login</span>
+                <button onclick="showLoginModal()" id="mobile-login-btn" class="px-3 py-1 bg-brand-600 text-white rounded text-xs">Login</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Modal Login (Siswa & Admin) -->
+    <div id="login-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-md w-full p-6 relative animate-in fade-in zoom-in duration-200">
+            <div class="text-center mb-6">
+                <div class="inline-flex p-3 bg-brand-100 text-brand-600 rounded-xl mb-2">
+                    <i data-lucide="lock" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900">Login Sistem CBT</h3>
+                <p class="text-xs text-slate-500 mt-1">Pilih status pengguna untuk mengakses sistem</p>
+            </div>
+
+            <!-- Role Selector Tabs -->
+            <div class="flex p-1 bg-slate-100 rounded-xl mb-5">
+                <button id="role-tab-siswa" onclick="setLoginRole('siswa')" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-white shadow text-brand-600">
+                    <i data-lucide="user" class="w-3.5 h-3.5 inline mr-1"></i>Peserta / Siswa
+                </button>
+                <button id="role-tab-admin" onclick="setLoginRole('admin')" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900">
+                    <i data-lucide="shield" class="w-3.5 h-3.5 inline mr-1"></i>Admin / Guru
+                </button>
+            </div>
+
+            <!-- Form Siswa -->
+            <form id="form-login-siswa" onsubmit="handleLoginSiswa(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Lengkap Siswa</label>
+                    <input type="text" id="siswa-name" required placeholder="Contoh: Ahmad Fauzi" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">NISN / ID Peserta</label>
+                    <input type="text" id="siswa-nisn" required placeholder="Contoh: 0051234567" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Kelas / Rombel</label>
+                    <select id="siswa-kelas" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        <option value="XII TEI 1">XII TEI 1</option>
+                        <option value="XII TEI 2">XII TEI 2</option>
+                        <option value="XII TEI 3">XII TEI 3</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm rounded-lg shadow transition-all">
+                    Masuk Sesi Ujian
+                </button>
+            </form>
+
+            <!-- Form Admin -->
+            <form id="form-login-admin" onsubmit="handleLoginAdmin(event)" class="hidden space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Username Admin</label>
+                    <input type="text" id="admin-username" required placeholder="Username (default: admin)" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Password</label>
+                    <input type="password" id="admin-password" required placeholder="Password (default: admin123)" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                </div>
+                <div id="admin-login-error" class="hidden text-xs text-rose-600 font-medium">
+                    Username atau password admin salah!
+                </div>
+                <button type="submit" class="w-full py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-semibold text-sm rounded-lg shadow transition-all">
+                    Masuk Panel Admin
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- SECTION 1: EXAM SIMULATION (CBT INTERFACE) -->
+        <section id="tab-exam" class="block space-y-6">
+            <!-- Exam Info Header -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">Simulasi Ujian Sumatif Akhir Semester</h2>
+                    <p class="text-slate-500 text-sm mt-1">Materi: Teknologi Pengambilan Keputusan Berinovasi & Komersialisasi Berkelanjutan</p>
+                    <div id="active-student-info" class="hidden mt-2 text-xs font-semibold text-brand-700 bg-brand-50 inline-block px-3 py-1 rounded-md border border-brand-200">
+                        <!-- Student details injected via JS -->
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4 bg-slate-50 p-3 rounded-lg border border-slate-200 self-start md:self-auto">
+                    <div class="flex items-center text-slate-700 font-medium">
+                        <i data-lucide="clock" class="w-5 h-5 text-brand-600 mr-2"></i>
+                        <span id="timer-display">120:00</span>
+                    </div>
+                    <button id="btn-toggle-exam" onclick="startOrResetExam()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-sm font-semibold transition-all">
+                        Mulai Ujian
+                    </button>
+                </div>
+            </div>
+
+            <!-- CBT Active Interface -->
+            <div id="cbt-workspace" class="hidden grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <!-- Question & Options Panel (3 Cols) -->
+                <div class="lg:col-span-3 space-y-6">
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 relative">
+                        <!-- Question Header Meta -->
+                        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4 mb-4">
+                            <span class="text-sm font-bold text-brand-600 bg-brand-50 px-3 py-1 rounded-full">
+                                Soal No. <span id="current-q-num">1</span> dari 50
+                            </span>
+                            <div class="flex items-center space-x-2 text-xs">
+                                <span id="q-bloom-badge" class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 font-semibold">Bloom: -</span>
+                                <span id="q-diff-badge" class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 font-semibold">Tingkat: -</span>
+                            </div>
+                        </div>
+
+                        <!-- Question Text -->
+                        <div id="question-text" class="text-slate-800 text-base sm:text-lg font-medium leading-relaxed mb-6">
+                            Silakan tekan "Mulai Ujian" untuk menampilkan soal.
+                        </div>
+
+                        <!-- Options List -->
+                        <div id="options-container" class="space-y-3">
+                            <!-- Options rendered via JavaScript -->
+                        </div>
+
+                        <!-- Navigation Footer -->
+                        <div class="flex items-center justify-between border-t border-slate-100 pt-6 mt-6">
+                            <button id="btn-prev" onclick="navigateQuestion(-1)" class="px-4 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50 disabled:opacity-50 font-medium text-sm flex items-center">
+                                <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>Sebelumnya
+                            </button>
+                            
+                            <label class="inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="doubtful-check" onchange="toggleDoubtful()" class="rounded border-slate-300 text-amber-500 focus:ring-amber-400 w-4 h-4">
+                                <span class="ml-2 text-xs sm:text-sm text-slate-600 font-medium">Ragu-ragu</span>
+                            </label>
+
+                            <button id="btn-next" onclick="navigateQuestion(1)" class="px-4 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700 font-medium text-sm flex items-center">
+                                Selanjutnya<i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Number Grid Navigation (1 Col) -->
+                <div class="lg:col-span-1 space-y-4">
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                        <h3 class="font-bold text-slate-800 mb-3 text-sm flex items-center">
+                            <i data-lucide="grid" class="w-4 h-4 mr-2 text-brand-600"></i>Navigasi Soal
+                        </h3>
+                        
+                        <!-- Grid 1-50 -->
+                        <div id="question-grid" class="grid grid-cols-5 gap-2 max-h-96 overflow-y-auto p-1">
+                            <!-- Grid Buttons Generated by JS -->
+                        </div>
+
+                        <!-- Legend -->
+                        <div class="border-t border-slate-100 mt-4 pt-3 space-y-2 text-xs">
+                            <div class="flex items-center"><span class="w-3 h-3 rounded bg-brand-600 mr-2"></span> Terjawab</div>
+                            <div class="flex items-center"><span class="w-3 h-3 rounded bg-amber-400 mr-2"></span> Ragu-ragu</div>
+                            <div class="flex items-center"><span class="w-3 h-3 rounded bg-slate-200 mr-2"></span> Belum Dijawab</div>
+                        </div>
+
+                        <button onclick="finishExam()" class="w-full mt-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-lg shadow transition-all flex items-center justify-center">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 mr-2"></i>Selesai & Kumpulkan
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exam Result Score Dashboard -->
+            <div id="exam-result" class="hidden bg-white rounded-xl shadow-md border border-slate-200 p-6 space-y-6">
+                <div class="text-center max-w-xl mx-auto space-y-3">
+                    <div class="inline-flex p-3 bg-emerald-100 text-emerald-600 rounded-full mb-2">
+                        <i data-lucide="award" class="w-10 h-10"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-900">Ujian Selesai!</h3>
+                    <p class="text-slate-600 text-sm">Berikut adalah hasil evaluasi ujian berbasis Komputer untuk mata pelajaran Kreativitas, Inovasi & Kewirausahaan Elektronika.</p>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-xs font-semibold text-slate-500 uppercase">Skor Total (0-100)</span>
+                        <div id="result-score" class="text-3xl font-extrabold text-brand-600 mt-1">0</div>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-xs font-semibold text-slate-500 uppercase">Jawaban Benar</span>
+                        <div id="result-correct" class="text-3xl font-extrabold text-emerald-600 mt-1">0 / 50</div>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-xs font-semibold text-slate-500 uppercase">Jawaban Salah</span>
+                        <div id="result-wrong" class="text-3xl font-extrabold text-rose-600 mt-1">0 / 50</div>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-xs font-semibold text-slate-500 uppercase">Predikat</span>
+                        <div id="result-predicate" class="text-2xl font-bold text-amber-600 mt-1.5">-</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: BANK SOAL & KUNCI JAWABAN WITH FILTERS -->
+        <section id="tab-bank" class="hidden space-y-6">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 flex items-center">
+                            <i data-lucide="book-open" class="w-6 h-6 text-brand-600 mr-2"></i>Bank Soal & Kunci Jawaban
+                        </h2>
+                        <p class="text-slate-500 text-xs mt-1">Daftar lengkap 50 butir soal beserta kunci jawaban dan pembahasan rinci.</p>
+                    </div>
+                    <!-- Filter Controls -->
+                    <div class="flex flex-wrap items-center gap-3 text-xs sm:text-sm">
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Level Bloom</label>
+                            <select id="filter-bloom" onchange="renderBankSoal()" class="px-3 py-1.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none bg-white">
+                                <option value="ALL">Semua Level Bloom</option>
+                                <option value="C2">C2 (Memahami - 20%)</option>
+                                <option value="C3">C3 (Mengaplikasikan - 40%)</option>
+                                <option value="C4-C6">C4-C6 (HOTS - 40%)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Tingkat Kesukaran</label>
+                            <select id="filter-diff" onchange="renderBankSoal()" class="px-3 py-1.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none bg-white">
+                                <option value="ALL">Semua Kesukaran</option>
+                                <option value="Mudah">Mudah</option>
+                                <option value="Sedang">Sedang</option>
+                                <option value="Sukar">Sukar</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Container where questions are injected -->
+                <div id="bank-soal-list" class="space-y-4"></div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: KRITERIA PENILAIAN & RUBRIK -->
+        <section id="tab-rubric" class="hidden space-y-6">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-6">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900 flex items-center">
+                        <i data-lucide="award" class="w-6 h-6 text-emerald-600 mr-2"></i>Kriteria Penilaian & Rubrik Evaluasi
+                    </h2>
+                    <p class="text-slate-500 text-xs mt-1">Panduan penilaian sumatif akhir semester berbasis taksonomi Bloom & Kurikulum Merdeka.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="p-4 rounded-xl border border-blue-200 bg-blue-50/50">
+                        <span class="text-xs font-bold text-blue-700 uppercase">C2 - Memahami (20%)</span>
+                        <h4 class="font-bold text-slate-800 text-base mt-1">10 Soal (Bobot Skor 20)</h4>
+                        <p class="text-xs text-slate-600 mt-2">Menguji pemahaman konsep dasar IoT, komersialisasi, Kaizen, SWOT, sertifikasi produk, dan MVP.</p>
+                    </div>
+                    <div class="p-4 rounded-xl border border-amber-200 bg-amber-50/50">
+                        <span class="text-xs font-bold text-amber-700 uppercase">C3 - Mengaplikasikan (40%)</span>
+                        <h4 class="font-bold text-slate-800 text-base mt-1">20 Soal (Bobot Skor 40)</h4>
+                        <p class="text-xs text-slate-600 mt-2">Penerapan teknik pada perancangan PCB, perhitungan harga jual, analisis CTR iklan, serta metode Lean 5S.</p>
+                    </div>
+                    <div class="p-4 rounded-xl border border-rose-200 bg-rose-50/50">
+                        <span class="text-xs font-bold text-rose-700 uppercase">C4-C6 - HOTS (40%)</span>
+                        <h4 class="font-bold text-slate-800 text-base mt-1">20 Soal (Bobot Skor 40)</h4>
+                        <p class="text-xs text-slate-600 mt-2">Penyelesaian masalah kompleks (C4 Analysis), evaluasi pemasok & strategi (C5 Evaluate), serta perancangan model bisnis & Green Electronics (C6 Create).</p>
+                    </div>
+                </div>
+
+                <!-- Konversi Predikat Table -->
+                <div class="border border-slate-200 rounded-xl overflow-hidden">
+                    <table class="w-full text-xs sm:text-sm text-left text-slate-600">
+                        <thead class="text-xs text-slate-700 uppercase bg-slate-100">
+                            <tr>
+                                <th class="px-4 py-3 border-b">Rentang Skor</th>
+                                <th class="px-4 py-3 border-b">Predikat</th>
+                                <th class="px-4 py-3 border-b">Kriteria Kemampuan</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200">
+                            <tr>
+                                <td class="px-4 py-3 font-bold text-emerald-600">88 - 100</td>
+                                <td class="px-4 py-3 font-bold">A (Sangat Baik)</td>
+                                <td class="px-4 py-3">Mampu menganalisis, mengevaluasi, dan merancang solusi inovasi secara mandiri.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 font-bold text-brand-600">75 - 87</td>
+                                <td class="px-4 py-3 font-bold">B (Baik)</td>
+                                <td class="px-4 py-3">Mampu mengaplikasikan konsep teknis dan bisnis dalam pengembangan produk elektronika.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 font-bold text-amber-600">65 - 74</td>
+                                <td class="px-4 py-3 font-bold">C (Cukup)</td>
+                                <td class="px-4 py-3">Memahami konsep dasar kewirausahaan & inovasi tetapi butuh panduan pada tingkat HOTS.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 font-bold text-rose-600">&lt; 65</td>
+                                <td class="px-4 py-3 font-bold">D (Perlu Bimbingan)</td>
+                                <td class="px-4 py-3">Memerlukan remedi serta pendampingan materi dasar teori dan praktik.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: PANEL ADMIN (GURU / PENGELOLA) -->
+        <section id="tab-admin" class="hidden space-y-6">
+                <!-- Admin Header & Stats -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-900 flex items-center">
+                                <i data-lucide="shield-check" class="w-6 h-6 text-amber-500 mr-2"></i>Panel Kontrol Admin / Penguji
+                            </h2>
+                            <p class="text-slate-500 text-xs mt-1">Kelola bank soal, pantau rekapitulasi nilai peserta, dan buat soal baru.</p>
+                        </div>
+                        <button onclick="openAddQuestionModal()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-bold shadow flex items-center self-start sm:self-auto">
+                            <i data-lucide="plus-circle" class="w-4 h-4 mr-1.5"></i>Tambah Soal Baru
+                        </button>
+                    </div>
+
+                    <!-- Ringkasan Statistik Ujian -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-center">
+                            <span class="text-xs font-semibold text-slate-500 uppercase">Total Soal Aktif</span>
+                            <div id="stat-total-q" class="text-2xl font-black text-slate-800 mt-1">50</div>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-center">
+                            <span class="text-xs font-semibold text-slate-500 uppercase">Siswa Sudah Ujian</span>
+                            <div id="stat-total-students" class="text-2xl font-black text-brand-600 mt-1">0</div>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-center">
+                            <span class="text-xs font-semibold text-slate-500 uppercase">Rata-Rata Nilai</span>
+                            <div id="stat-avg-score" class="text-2xl font-black text-emerald-600 mt-1">0.0</div>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-center">
+                            <span class="text-xs font-semibold text-slate-500 uppercase">Proporsi HOTS (C4-C6)</span>
+                            <div id="stat-hots-ratio" class="text-2xl font-black text-amber-600 mt-1">40%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rekap Hasil Ujian Siswa -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-4">
+                    <h3 class="font-bold text-slate-900 text-base flex items-center">
+                        <i data-lucide="users" class="w-5 h-5 mr-2 text-brand-600"></i>Rekapitulasi Hasil Ujian Peserta
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs sm:text-sm text-left text-slate-600 border border-slate-200 rounded-lg">
+                            <thead class="text-xs text-slate-700 uppercase bg-slate-100">
+                                <tr>
+                                    <th class="px-4 py-3 border-b">Nama Siswa</th>
+                                    <th class="px-4 py-3 border-b">NISN</th>
+                                    <th class="px-4 py-3 border-b">Kelas</th>
+                                    <th class="px-4 py-3 border-b">Jawaban Benar</th>
+                                    <th class="px-4 py-3 border-b">Skor Akhir</th>
+                                    <th class="px-4 py-3 border-b">Predikat</th>
+                                    <th class="px-4 py-3 border-b">Waktu Selesai</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-results-table" class="divide-y divide-slate-200">
+                                <tr>
+                                    <td colspan="7" class="px-4 py-6 text-center text-slate-400">Belum ada data ujian yang diselesaikan.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        <!-- Modal Tambah Soal Baru (Admin) -->
+        <div id="add-q-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-2xl w-full p-6 relative max-h-[90vh] overflow-y-auto">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <h3 class="font-bold text-slate-900 text-lg flex items-center">
+                        <i data-lucide="file-plus" class="w-5 h-5 text-brand-600 mr-2"></i>Tambah Soal Baru ke Bank Soal
+                    </h3>
+                    <button onclick="closeAddQuestionModal()" class="text-slate-400 hover:text-slate-600">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <form onsubmit="handleCreateQuestion(event)" class="space-y-4 text-xs sm:text-sm">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Level Bloom</label>
+                            <select id="new-q-bloom" class="w-full p-2 border border-slate-300 rounded-lg">
+                                <option value="C2">C2 (Memahami)</option>
+                                <option value="C3">C3 (Mengaplikasikan)</option>
+                                <option value="C4">C4 (Menganalisis - HOTS)</option>
+                                <option value="C5">C5 (Mengevaluasi - HOTS)</option>
+                                <option value="C6">C6 (Mencipta - HOTS)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Tingkat Kesukaran</label>
+                            <select id="new-q-diff" class="w-full p-2 border border-slate-300 rounded-lg">
+                                <option value="Mudah">Mudah</option>
+                                <option value="Sedang">Sedang</option>
+                                <option value="Sukar">Sukar</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Pertanyaan Soal</label>
+                        <textarea id="new-q-text" required rows="3" placeholder="Tuliskan butir soal di sini..." class="w-full p-2 border border-slate-300 rounded-lg"></textarea>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="block font-semibold text-slate-700">Pilihan Jawaban (A-E)</label>
+                        <input type="text" id="new-opt-a" required placeholder="Opsi A" class="w-full p-2 border border-slate-300 rounded-lg">
+                        <input type="text" id="new-opt-b" required placeholder="Opsi B" class="w-full p-2 border border-slate-300 rounded-lg">
+                        <input type="text" id="new-opt-c" required placeholder="Opsi C" class="w-full p-2 border border-slate-300 rounded-lg">
+                        <input type="text" id="new-opt-d" required placeholder="Opsi D" class="w-full p-2 border border-slate-300 rounded-lg">
+                        <input type="text" id="new-opt-e" required placeholder="Opsi E" class="w-full p-2 border border-slate-300 rounded-lg">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 pt-2">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Kunci Jawaban Benar</label>
+                            <select id="new-q-key" class="w-full p-2 border border-slate-300 rounded-lg">
+                                <option value="0">Opsi A</option>
+                                <option value="1">Opsi B</option>
+                                <option value="2">Opsi C</option>
+                                <option value="3">Opsi D</option>
+                                <option value="4">Opsi E</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Ulasan & Pembahasan</label>
+                        <textarea id="new-q-exp" required rows="2" placeholder="Penjelasan jawaban benar..." class="w-full p-2 border border-slate-300 rounded-lg"></textarea>
+                    </div>
+
+                    <div class="flex justify-end space-x-2 pt-4">
+                        <button type="button" onclick="closeAddQuestionModal()" class="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg font-medium">Batal</button>
+                        <button type="submit" class="px-4 py-2 bg-brand-600 text-white rounded-lg font-bold hover:bg-brand-700">Simpan Soal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-4 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500">
+            CBT Evaluasi Pembelajaran SMK Teknik Elektronika &copy; 2026/2027. Disesuaikan dengan Kurikulum Merdeka & Taksonomi Bloom.
+        </div>
+    </footer>
+
+    <!-- SCRIPT DATA & APP LOGIC -->
+    <script>
+        // AUTHENTICATION & ROLE STATE
+        let currentUser = null; // { name, nisn, kelas, role: 'siswa' | 'admin' }
+        let currentLoginRoleTab = 'siswa';
+        let studentExamResults = []; // Stores exam attempts
+
+        // DATA SOAL COMPLETE 50 ITEMS ACCORDING TO SPECIFICATIONS
+        const questionsData = [
+            // C2 (Memahami - 20% = 10 Soal)
+            {
+                id: 1,
+                bloom: "C2",
+                diff: "Mudah",
+                question: "Dalam konteks pengembangan produk elektronika, apa yang dimaksud dengan teknologi Internet of Things (IoT)?",
+                options: [
+                    "A. Sistem jaringan kabel LAN bertautan tinggi pada perangkat pabrik.",
+                    "B. Jaringan objek fisik yang terintegrasi sensor dan perangkat lunak untuk menukar data via Internet.",
+                    "C. Teknologi pembuatan skematik PCB berbasis komputasi awan secara otomatis.",
+                    "D. Metode pengujian toleransi tegangan tinggi pada sistem microgrid.",
+                    "E. Sistem proteksi kelistrikan berkecepatan tinggi pada jaringan arus kuat."
+                ],
+                answer: 1, // B
+                explanation: "IoT adalah konsep di mana objek fisik diintegrasikan dengan sensor, perangkat lunak, dan teknologi lain untuk menghubungkan dan mempertukarkan data dengan perangkat lain melalui Internet."
+            },
+            {
+                id: 2,
+                bloom: "C2",
+                diff: "Mudah",
+                question: "Manakah di bawah ini yang paling tepat mendeskripsikan istilah 'Komersialisasi Inovasi' pada industri perangkat keras (hardware)?",
+                options: [
+                    "A. Proses merancang skematik rangkaian dari tahap awal simulator.",
+                    "B. Pengujian daya tahan produk elektronika di dalam laboratorium penguji.",
+                    "C. Proses membawa ide inovatif atau produk hasil riset menuju pasar komersial.",
+                    "D. Aktivitas perbaikan bug pada firmware mikrokontroler secara berkala.",
+                    "E. Kegiatan pendaftaran hak cipta tata letak sirkuit terpadu ke Lembaga Hukum."
+                ],
+                answer: 2, // C
+                explanation: "Komersialisasi inovasi adalah rangkaian proses mengubah ide baru atau hasil riset produk/teknologi menjadi barang/jasa bernilai jual yang dipasarkan secara luas."
+            },
+            {
+                id: 3,
+                bloom: "C2",
+                diff: "Mudah",
+                question: "Prinsip dasar dari perbaikan berkelanjutan (Continuous Improvement / Kaizen) pada lini manufaktur elektronika adalah...",
+                options: [
+                    "A. Mengganti seluruh mesin produksi setiap 6 bulan sekali secara serentak.",
+                    "B. Perbaikan kecil secara bertahap dan konsisten untuk meningkatkan mutu dan efisiensi.",
+                    "C. Menaikkan harga jual produk secara periodik untuk meningkatkan margin.",
+                    "D. Mengurangi penggunaan komponen keselamatan demi menghemat biaya produksi.",
+                    "E. Fokus memproduksi produk standar tanpa memperhatikan masukan konsumen."
+                ],
+                answer: 1, // B
+                explanation: "Continuous Improvement (Kaizen) menekankan perbaikan berkelanjutan secara bertahap, konstan, dan berkesinambungan pada proses produksi maupun kualitas produk."
+            },
+            {
+                id: 4,
+                bloom: "C2",
+                diff: "Mudah",
+                question: "Tujuan utama diadakannya analisis SWOT sebelum mengambil keputusan berinovasi di bidang elektronika adalah...",
+                options: [
+                    "A. Menghitung jumlah beban pajak tahunan perusahaan.",
+                    "B. Memetakan kekuatan, kelemahan, peluang, dan ancaman produk/bisnis.",
+                    "C. Menentukan jenis mikrokontroler yang paling murah di pasaran.",
+                    "D. Memastikan sertifikasi ISO pasti didapatkan dalam seminggu.",
+                    "E. Menghapus persaingan dengan cara mengambil alih saham kompetitor."
+                ],
+                answer: 1, // B
+                explanation: "Analisis SWOT digunakan untuk mengidentifikasi Strengths (Kekuatan), Weaknesses (Kelemahan), Opportunities (Peluang), dan Threats (Ancaman) secara terstruktur."
+            },
+            {
+                id: 5,
+                bloom: "C2",
+                diff: "Mudah",
+                question: "Sertifikasi Standar Nasional Indonesia (SNI) atau sertifikat CE pada produk elektronika konsumen berfungsi utama sebagai...",
+                options: [
+                    "A. Syarat formalitas agar harga produk bisa dinaikkan 300%.",
+                    "B. Penanda bahwa produk memiliki tampilan visual warna yang estetis.",
+                    "C. Jaminan bahwa produk telah memenuhi standar keamanan, kualitas, dan regulasi legal.",
+                    "D. Bukti bahwa komponen seluruhnya diimpor dari luar negeri.",
+                    "E. Dokumen rahasia untuk menyembunyikan skematik dari kompetitor."
+                ],
+                answer: 2, // C
+                explanation: "Sertifikasi keselamatan produk seperti SNI atau CE memberikan jaminan legalitas, standar kualitas, serta keamanan operasi bagi konsumen."
+            },
+            {
+                id: 6,
+                bloom: "C2",
+                diff: "Mudah",
+                question: "Istilah Minimum Viable Product (MVP) dalam pengembangan produk perangkat elektronik berarti...",
+                options: [
+                    "A. Produk akhir yang dibuat versi kemasan terbatas bertabur komponen mahal.",
+                    "B. Versi sederhana dari produk yang hanya memiliki fitur inti untuk menguji reaksi pasar.",
+                    "C. Komponen bekas yang didaur ulang untuk dijual kembali dengan harga paling murah.",
+                    "D. Ringkasan laporan keuangan proyek yang diajukan ke investor.",
+                    "E. Produk sampel berukuran mikro yang digunakan khusus keperluan pameran saja."
+                ],
+                answer: 1, // B
+                explanation: "MVP adalah versi produk baru dengan fitur fungsional minimum yang cukup untuk dikumpulkan umpan baliknya dari calon pengguna awal."
+            },
+            {
+                id: 7,
+                bloom: "C2",
+                diff: "Mudah",
+                question: "Apa fungsi utama dari Sistem Informasi Manajemen Operasional (seperti ERP/CRM) dalam komersialisasi produk elektronika?",
+                options: [
+                    "A. Mengatur kecepatan putar motor pada mesin soldering reflow.",
+                    "B. Mengintegrasikan data rantai pasok, penjualan, dan layanan pelanggan secara terpusat.",
+                    "C. Menggantikan seluruh peran insinyur tata letak PCB.",
+                    "D. Menghasilkan energi listrik cadangan saat pabrik mati lampu.",
+                    "E. Melindungi mikrokontroler dari radiasi gelombang elektromagnetik eksternal."
+                ],
+                answer: 1, // B
+                explanation: "ERP/CRM berfungsi mengintegrasikan data operasional, stok pasokan komponen, hingga hubungan pelanggan secara sistematis untuk efisiensi bisnis."
+            },
+            {
+                id: 8,
+                bloom: "C2",
+                diff: "Mudah",
+                question: "Dalam siklus hidup produk (Product Life Cycle), tahap di mana komersialisasi inovasi mulai diluncurkan secara besar-besaran disebut tahap...",
+                options: [
+                    "A. Perancangan (Design Stage)",
+                    "B. Pengenalan (Introduction Stage)",
+                    "C. Pertumbuhan (Growth Stage)",
+                    "D. Kematangan (Maturity Stage)",
+                    "E. Penurunan (Decline Stage)"
+                ],
+                answer: 1, // B
+                explanation: "Tahap Pengenalan (Introduction Stage) adalah fase awal saat produk inovasi resmi diluncurkan dan diperkenalkan ke pasar sasaran."
+            },
+            {
+                id: 9,
+                bloom: "C2",
+                diff: "Mudah",
+                question: "Peran utama dari Feedback Loop (Lingkaran Umpan Balik) Pengguna dalam proses evaluasi produk elektronika adalah...",
+                options: [
+                    "A. Menghadapi tuntutan hukum dari pesaing pasar.",
+                    "B. Memperoleh data riil pengalaman pengguna guna iterasi perbaikan produk.",
+                    "C. Mempercepat proses etsa PCB otomatis di laboratorium.",
+                    "D. Menurunkan nilai pajak pertambahan nilai komponen terimpor.",
+                    "E. Menyembunyikan kekurangan teknis produk dari media massa."
+                ],
+                answer: 1, // B
+                explanation: "Umpan balik pelanggan menyediakan wawasan langsung mengenai kekurangan dan kebutuhan riil untuk melakukan peningkatan berkelanjutan (iterasi)."
+            },
+            {
+                id: 10,
+                bloom: "C2",
+                diff: "Mudah",
+                question: "Teknologi simulator perangkat lunak (seperti Proteus atau LTSpice) membantu pengambilan keputusan inovasi dalam hal...",
+                options: [
+                    "A. Memprediksi harga saham komponen elektronika secara akurat.",
+                    "B. Memvalidasi kerja rangkaian sebelum fabrikasi prototype fisik guna menghemat biaya.",
+                    "C. Mencetak casing 3D tanpa perlu menggunakan filamen fisik.",
+                    "D. Menjual prototype langsung ke toko daring secara otomatis.",
+                    "E. Menghapus gangguan noise listrik pada kabel secara fisik."
+                ],
+                answer: 1, // B
+                explanation: "Simulasi software memungkinkan teknisi menguji fungsionalitas rangkaian sebelum membuat prototype fisik sehingga risiko biaya dapat ditekan."
+            },
+
+            // C3 (Mengaplikasikan - 40% = 20 Soal)
+            {
+                id: 11,
+                bloom: "C3",
+                diff: "Sedang",
+                question: "Tim teknisi merancang modul Smart Home IoT berbasis ESP32. Untuk mengambil keputusan fitur mana yang ditambahkan agar sesuai tren hemat energi, langkah berbasis data teknologi yang paling tepat adalah...",
+                options: [
+                    "A. Membeli komponen termahal di pasar online tanpa survei.",
+                    "B. Mengumpulkan data konsumsi energi perangkat dari sensor telemetri uji coba awal.",
+                    "C. Menentukan fitur hanya berdasarkan preferensi pribadi ketua tim.",
+                    "D. Langsung memproduksi 10.000 unit tanpa pengujian pasar.",
+                    "E. Mengurangi kapasitas catu daya agar ukuran produk lebih kecil."
+                ],
+                answer: 1, // B
+                explanation: "Pengambilan keputusan berinovasi yang efektif didasarkan pada analisis data empiris/telemetri penggunaan energi dari sensor."
+            },
+            {
+                id: 12,
+                bloom: "C3",
+                diff: "Sedang",
+                question: "Sebuah wirausaha muda elektronika ingin memasarkan alat monitoring kualitas air tambak otomatis. Strategi komersialisasi awal yang efisien untuk menjangkau kelompok pembudidaya ikan adalah...",
+                options: [
+                    "A. Memasang baliho iklan di pusat perbelanjaan kota besar.",
+                    "B. Melakukan demonstrasi langsung (live demo) di asosiasi petani tambak & menggunakan media sosial terarah.",
+                    "C. Menjual produk secara eksklusif hanya di toko suku cadang elektronik radio lama.",
+                    "D. Menyimpan produk hingga ada investor asing yang memborong seluruh stok.",
+                    "E. Menjual alat dalam kondisi belum diprogram agar pembeli memprogram sendiri."
+                ],
+                answer: 1, // B
+                explanation: "Demonstrasi produk langsung pada komunitas sasaran (petani tambak) dikombinasikan dengan edukasi digital terbukti paling tepat sasaran."
+            },
+            {
+                id: 13,
+                bloom: "C3",
+                diff: "Sedang",
+                question: "Saat menguji produk otomatisasi penetas telur, ditemukan bahwa suhu fluktuatif ±3°C akibat respon heater lambat. Tindakan perbaikan teknis berkesinambungan yang tepat adalah...",
+                options: [
+                    "A. Menjual alat tersebut dengan memberi diskon besar tanpa perbaikan.",
+                    "B. Mengganti sistem kontrol ON/OFF sederhana dengan algoritma PID terintegrasi sensor presisi.",
+                    "C. Menambah kipas angin daya tinggi secara acak tanpa kontrol suhu.",
+                    "D. Mengubah kemasan box kayu menjadi box plastik bening.",
+                    "E. Menyuruh konsumen mengatur suhu secara manual setiap jam."
+                ],
+                answer: 1, // B
+                explanation: "Mengimplementasikan kontroler PID adalah solusi teknis standar untuk mengatasi fluktuasi suhu dan respon lambat pada sistem pemanas."
+            },
+            {
+                id: 14,
+                bloom: "C3",
+                diff: "Sedang",
+                question: "Sebuah start-up elektronik memanfaatkan platform E-Commerce dan Digital Ads untuk mengukur ketertarikan pasar terhadap varian smart door lock baru. Langkah mengaplikasikan data rasio klik (CTR) iklan tersebut adalah...",
+                options: [
+                    "A. Mematikan seluruh iklan jika ada 1 komentar negatif.",
+                    "B. Menganalisis varian desain mana yang paling banyak diminati calon konsumen sebelum produksi massal.",
+                    "C. Langsung meminjam modal bank dalam jumlah maksimal tanpa analisa lanjutan.",
+                    "D. Mengganti bidang usaha menjadi jasa perbaikan komputer.",
+                    "E. Mengabaikan data CTR dan tetap memproduksi warna yang tidak disukai."
+                ],
+                answer: 1, // B
+                explanation: "Data CTR (Click-Through-Rate) dapat dimanfaatkan untuk memvalidasi minat pasar terhadap konsep/desain produk sebelum memproduksi dalam jumlah besar."
+            },
+            {
+                id: 15,
+                bloom: "C3",
+                diff: "Sedang",
+                question: "Guna menekan biaya manufaktur PCB pada skala komersial 1.000 unit, langkah efisiensi tata letak (layout) PCB yang dapat diimplementasikan adalah...",
+                options: [
+                    "A. Menggunakan PCB 4-layer meskipun jalur sederhana.",
+                    "B. Menerapkan panelisasi (panelization) PCB dan mengoptimalkan komponen Surface Mount Device (SMD).",
+                    "C. Memakai kabel jumper secara manual untuk menghubungkan antar jalur.",
+                    "D. Memperbesar ukuran PCB dua kali lipat dari ukuran komponen.",
+                    "E. Menghilangkan proses solder mask agar biaya cetak murah."
+                ],
+                answer: 1, // B
+                explanation: "Panelisasi PCB dan penggunaan komponen SMD mempercepat proses assembling mesin SMD Pick-and-Place sehingga menekan biaya per unit."
+            },
+            {
+                id: 16,
+                bloom: "C3",
+                diff: "Sedang",
+                question: "Produk inverter daya tenaga surya mengalami pengembalian barang (return) dari konsumen sebesar 8% karena overheat. Langkah evaluasi perbaikan berkelanjutan berbasis metodologi 5-Why adalah...",
+                options: [
+                    "A. Menyalahkan pembeli karena menaruh inverter di luar ruangan.",
+                    "B. Mengusut akar penyebab dari overheat secara runtut hingga menemukan kelemahan heatsink/manajemen termal.",
+                    "C. Menghentikan seluruh garansi produk agar perusahaan tidak rugi.",
+                    "D. Mengganti nama merk inverter dan menjualnya kembali.",
+                    "E. Membakar seluruh stok yang tersisa di gudang."
+                ],
+                answer: 1, // B
+                explanation: "Metode 5-Why diterapkan untuk menggali akar masalah (root cause) hingga ditemukan solusi permanen pada perbaikan sistem pendinginan termal."
+            },
+            {
+                id: 17,
+                bloom: "C3",
+                diff: "Sedang",
+                question: "Siswa SMK Elektronika berhasil membuat charger HP bertenaga dinamika sepeda. Bagaimana cara menyusun Value Proposition (Nilai Tawar) produk ini agar menarik konsumen penggiat touring?",
+                options: [
+                    "A. Menekankan bahwa harga alat sangat mahal karena rakitan tangan.",
+                    "B. Menyoroti kemudahan pengisian daya darurat secara ramah lingkungan di area tanpa listrik.",
+                    "C. Mengklaim alat dapat mengisi daya listrik rumah tangga 220V.",
+                    "D. Menyembunyikan kekurangan ukuran alat yang agak berat.",
+                    "E. Menjual alat tanpa memberikan petunjuk cara penggunaan."
+                ],
+                answer: 1, // B
+                explanation: "Value Proposition harus berfokus pada solusi konkrit bagi target konsumen (pesepeda/touring) yaitu kemandirian energi saat outdoor."
+            },
+            {
+                id: 18,
+                bloom: "C3",
+                diff: "Sedang",
+                question: "Sebuah pabrik lampu LED melakukan evaluasi kualitas akhir dengan metode Statistical Process Control (SPC). Jika ditemukan tingkat cacat melampaui batas toleransi 2%, tindakan terukur yang diambil adalah...",
+                options: [
+                    "A. Menurunkan standar kualitas agar semua produk tetap lolos.",
+                    "B. Menghentikan sementara baris produksi untuk kalibrasi ulang mesin dan audit pasokan komponen.",
+                    "C. Menjual barang cacat ke pasar dengan label kualitas premium.",
+                    "D. Memecat seluruh staf QC tanpa memeriksa mesin.",
+                    "E. Mengabaikan laporan SPC karena mengejar kuota harian."
+                ],
+                answer: 1, // B
+                explanation: "Jika batas toleransi SPC terlampaui, langkah korektif standar adalah audit teknis, kalibrasi peralatan, dan pengecekan material."
+            },
+            {
+                id: 19,
+                bloom: "C3",
+                diff: "Sedang",
+                question: "Untuk melindungi hak intelektual atas temuan algoritma efisiensi baterai pada kendaraan listrik yang baru diciptakan, tindakan hukum-bisnis yang wajib dilakukan adalah...",
+                options: [
+                    "A. Mengunggah seluruh kode program di forum terbuka.",
+                    "B. Mengajukan pendaftaran Hak Paten/Hak Cipta ke Direktorat Jenderal Kekayaan Intelektual (DJKI).",
+                    "C. Menyimpan kode di USB drive dan menyimpannya di almari sekolah.",
+                    "D. Membeli domain website baru atas nama produk.",
+                    "E. Menjual program ke perusahaan asing tanpa perjanjian lisensi."
+                ],
+                answer: 1, // B
+                explanation: "Mendaftarkan paten/ciptaan ke DJKI adalah prosedur legal resmi untuk melindungi inovasi teknis dari pembajakan."
+            },
+            {
+                id: 20,
+                bloom: "C3",
+                diff: "Sedang",
+                question: "Tim proyek mengembangkan robot pembersih lantai otomatis. Dari data uji beta, baterai hanya bertahan 15 menit. Tindakan pengaplikasian inovasi yang tepat untuk meningkatkan efisiensi waktu kerja adalah...",
+                options: [
+                    "A. Mengurangi roda robot dari 4 menjadi 2.",
+                    "B. Mengganti jenis baterai ke LiFePO4 dan mengoptimalkan sleep-mode pada kode mikrokontroler.",
+                    "C. Menghapus semua sensor jarak agar tidak memakan daya.",
+                    "D. Menyuruh konsumen mengisi daya setiap 10 menit sekali.",
+                    "E. Menggunakan kabel colokan listrik panjang 50 meter."
+                ],
+                answer: 1, // B
+                explanation: "Kombinasi peningkatan kepadatan energi baterai (LiFePO4) dan optimasi perangkat lunak (sleep mode) merupakan penerapan inovasi hemat energi yang efektif."
+            },
+            {
+                id: 21,
+                bloom: "C3",
+                diff: "Sedang",
+                question: "Dalam proyek komersialisasi audio amplifier Hi-Fi, pengembang ingin menetapkan harga jual dengan metode 'Cost-Plus Pricing'. Jika biaya total produksi Rp 200.000/unit dan margin keuntungan diinginkan 35%, maka harga jualnya adalah...",
+                options: [
+                    "A. Rp 235.000",
+                    "B. Rp 250.000",
+                    "C. Rp 270.000",
+                    "D. Rp 300.000",
+                    "E. Rp 350.000"
+                ],
+                answer: 2, // C
+                explanation: "Harga Jual = Biaya Produksi + (35% x Biaya Produksi) = Rp 200.000 + Rp 70.000 = Rp 270.000."
+            },
+            {
+                id: 22,
+                bloom: "C3",
+                diff: "Sedang",
+                question: "Bagaimana cara memanfaatkan teknologi Google Analytics / Meta Pixel dalam mengambil keputusan saluran komersialisasi produk elektronik IoT?",
+                options: [
+                    "A. Memantau usia, wilayah, dan perilaku pengunjung situs untuk memfokuskan iklan berbayar.",
+                    "B. Mengotomatiskan proses pengelasan komponen SMD pada PCB.",
+                    "C. Mengukur suhu pemprosesan mikrokontroler saat bekerja berat.",
+                    "D. Menghitung jumlah penggunaan timah solder per unit.",
+                    "E. Mengunduh data skematik dari server kompetitor."
+                ],
+                answer: 0, // A
+                explanation: "Analitik web berfungsi menyediakan data demografi dan perilaku konsumen untuk pengambilan keputusan alokasi anggaran pemasaran."
+            },
+            {
+                id: 23,
+                bloom: "C3",
+                diff: "Sedang",
+                question: "Teknologi Over-The-Air (OTA) Firmware Update pada perangkat alat kesehatan berbasis elektronika dimanfaatkan dalam perbaikan berkelanjutan untuk...",
+                options: [
+                    "A. Mengganti komponen fisik IC yang terbakar secara nirkabel.",
+                    "B. Memperbaiki bug dan menambah fitur baru pada perangkat tanpa harus menarik fisik produk dari konsumen.",
+                    "C. Memperbesar kapasitas baterai lithium secara otomatis.",
+                    "D. Menurunkan harga jual produk yang sudah dibeli konsumen.",
+                    "E. Mengubah bentuk fisik casing alat kesehatan."
+                ],
+                answer: 1, // B
+                explanation: "Pembaruan OTA memungkinkan produsen memperbarui sistem operasi/firmware produk IoT secara jarak jauh tanpa perlu menarik unit fisik."
+            },
+            {
+                id: 24,
+                bloom: "C3",
+                diff: "Sedang",
+                question: "Seorang teknisi mengaplikasikan metode Business Model Canvas (BMC) saat akan mengomersialkan produk sistem presensi wajah berbasis AI. Elemen 'Key Resource' utama pada usaha ini adalah...",
+                options: [
+                    "A. Brosur kertas dan baliho pinggir jalan.",
+                    "B. Algoritma AI, sensor kamera presisi tinggi, dan keahlian programmer.",
+                    "C. Gedung kantor megah berlantai 10.",
+                    "D. Armada mobil pengantar barang.",
+                    "E. Toko fisik di dalam pusat perbelanjaan."
+                ],
+                answer: 1, // B
+                explanation: "Key Resources (Sumber Daya Utama) untuk produk berbasis AI adalah IP/Algoritma software, hardware pendukung (kamera), dan talenta pengembang."
+            },
+            {
+                id: 25,
+                bloom: "C3",
+                diff: "Sedang",
+                question: "Suatu alat pengukur kadar gula darah non-invasif mendapat keluhan respon pembacaan melambat jika suhu sekitar panas. Aplikasi perbaikan berbasis desain enkapsulasi adalah...",
+                options: [
+                    "A. Menghapus fitur pengukur suhu ruangan.",
+                    "B. Menambahkan isolator termal dan kompensasi sensor suhu internal dalam algoritma.",
+                    "C. Meminta pengguna memakai alat di dalam kulkas.",
+                    "D. Mengurangi tingkat kecerahan layar OLED.",
+                    "E. Menjual alat khusus untuk wilayah beriklim salju saja."
+                ],
+                answer: 1, // B
+                explanation: "Menambahkan isolasi termal dan algoritma kompensasi suhu mengatasi drif nilai pembacaan sensor akibat pengaruh lingkungan eksternal."
+            },
+            {
+                id: 26,
+                bloom: "C3",
+                diff: "Sedang",
+                question: "Saat merancang produk komersial berbasis mikrokontroler, tim memilih antara komponen Through-Hole (THT) atau Surface Mount Device (SMD). Pengambilan keputusan yang tepat untuk efisiensi produksi massal adalah...",
+                options: [
+                    "A. Memilih THT karena mudah disolder pakai tangan satu per satu.",
+                    "B. Memilih SMD karena mendukung otomatisasi perakitan mesin Pick-and-Place dan menghemat ruang PCB.",
+                    "C. Memilih THT karena ukurannya lebih besar dan terlihat kokoh.",
+                    "D. Menggabungkan THT dan SMD secara acak tanpa mempertimbangkan proses fabrikasi.",
+                    "E. Menghindari keduanya dan memakai sambungan kabel melayang."
+                ],
+                answer: 1, // B
+                explanation: "Komponen SMD sangat ideal untuk komersialisasi skala industri karena mendukung kecepatan otomatisasi mesin perakitan dan efisiensi dimensi."
+            },
+            {
+                id: 27,
+                bloom: "C3",
+                diff: "Sedang",
+                question: "Proses pemetakan pengalaman pengguna (User Journey Mapping) pada aplikasi kontrol perangkat IoT bertujuan untuk...",
+                options: [
+                    "A. Menghitung rugi laba bersih tahunan perusahaan.",
+                    "B. Mengidentifikasi titik hambatan (pain points) pengguna saat mengoperasikan perangkat.",
+                    "C. Memilih jenis solder pasta yang paling murah.",
+                    "D. Mengukur tegangan kerja catu daya switching.",
+                    "E. Menentukan alamat IP publik pada router pabrik."
+                ],
+                answer: 1, // B
+                explanation: "User Journey Mapping membantu memahami langkah pengguna serta menemukan kesulitan (pain points) untuk menyempurnakan interaksi UX/UI."
+            },
+            {
+                id: 28,
+                bloom: "C3",
+                diff: "Sedang",
+                question: "Aplikasi metode Lean Manufacturing '5S' (Seiri, Seiton, Seiso, Seiketsu, Shitsuke) pada bengkel produksi perangkat elektronik berdampak pada...",
+                options: [
+                    "A. Peningkatan daya muat arus listrik pada trafo.",
+                    "B. Efisiensi kerja, penurunan risiko kesalahan rakit, dan lingkungan kerja yang aman teratur.",
+                    "C. Kenaikan kecepatan transfer data WiFi mikrokontroler.",
+                    "D. Penurunan harga beli bahan baku silikon semikonduktor.",
+                    "E. Otomatisasi pendaftaran izin usaha secara online."
+                ],
+                answer: 1, // B
+                explanation: "Metode 5S merapikan dan menata lingkungan kerja fisik manufaktur untuk meminimalkan waste, mencegah kesalahan rakit, dan meningkatkan efisiensi."
+            },
+            {
+                id: 29,
+                bloom: "C3",
+                diff: "Sedang",
+                question: "Penggunaan teknologi Rapid Prototyping (seperti 3D Printing) dalam tahapan pengembangan casing alat eletronika berfungsi untuk...",
+                options: [
+                    "A. Menggantikan proses cetak injection molding skala jutaan unit.",
+                    "B. Mempercepat validasi bentuk fisik dan ergonomi sebelum investasi cetakan cetakan industri mahal.",
+                    "C. Menghasilkan bahan plastik yang tahan ledakan nuklir.",
+                    "D. Mengurangi konsumsi daya listrik pada rangkaian internal.",
+                    "E. Menghilangkan kebutuhan insinyur desain mekanik."
+                ],
+                answer: 1, // B
+                explanation: "3D printing memungkinkan pembuatan sampel casing fisik secara cepat (rapid) untuk mengevaluasi ukuran dan ergonomi sebelum pembuatan moulding mahal."
+            },
+            {
+                id: 30,
+                bloom: "C3",
+                diff: "Sedang",
+                question: "Langkah awal pengaplikasian analisis persaingan (Benchmarking) terhadap produk kompetitor sejenis di pasar adalah...",
+                options: [
+                    "A. Meniru secara persis seluruh bentuk produk tanpa inovasi.",
+                    "B. Menganalisis kelebihan, kekurangan, fitur, dan harga produk kompetitor sebagai acuan standar keunggulan.",
+                    "C. Membeli perusahaan kompetitor secara paksa.",
+                    "D. Menyebarkan ulasan negatif palsu di toko online kompetitor.",
+                    "E. Menghentikan pengembangan produk sendiri karena takut bersaing."
+                ],
+                answer: 1, // B
+                explanation: "Benchmarking adalah proses membandingkan fitur, performa, dan strategi produk sendiri dengan pemimpin pasar untuk menemukan celah keunggulan."
+            },
+
+            // C4, C5, C6 (HOTS - 40% = 20 Soal)
+            {
+                id: 31,
+                bloom: "C4",
+                diff: "Sukar",
+                question: "Sebuah unit wirausaha SMK memproduksi alat pemilah sampah otomatis berbasis sensor frekuensi. Setelah 3 bulan dipasarkan, data menunjukkan 30% konsumen mengeluhkan kegagalan pembacaan pada bahan logam tipis (kaleng alumunium). Analisis teknis yang paling tepat mengenai penyebab dan perbaikan masalah ini adalah...",
+                options: [
+                    "A. Sensor induktif yang digunakan kurang sensitif terhadap logam non-ferro; solusinya mengganti atau mengombinasikan dengan sensor kapastif/eddy current.",
+                    "B. Tegangan catu daya terlalu tinggi; solusinya menurunkan tegangan dari 12V ke 5V.",
+                    "C. Program mikrokontroler mengalami memory leak; solusinya menambah kapasitas RAM external.",
+                    "D. Casing alat kurang menarik; solusinya mengecat ulang dengan warna cerah.",
+                    "E. Motor servo pemilah terlalu lambat; solusinya mengganti dengan motor stepper skala industri."
+                ],
+                answer: 0, // A
+                explanation: "Sensor induktif standar sering kali sulit mendeteksi aluminium (non-ferro) secara presisi. Analisis ini menunjuk pada pemilihan jenis sensor (kapasitif/eddy current) yang tepat."
+            },
+            {
+                id: 32,
+                bloom: "C5",
+                diff: "Sukar",
+                question: "Tim pengembang menghadapi dilema pengambilan keputusan dalam komersialisasi Smart Farming Kit: Menggunakan konektivitas GSM/4G (jangkauan luas, biaya berlangganan SIM tinggi) ATAU LoRaWAN (jangkauan jauh, biaya operasional gratis, butuh gateway tambahan). Evaluasi keputusan terbaik untuk area pertanian terpencil tanpa seluler adalah...",
+                options: [
+                    "A. Memilih GSM/4G karena semua petani pasti memiliki kartu kuota internet.",
+                    "B. Memilih LoRaWAN karena tidak bergantung pada sinyal seluler dan lebih hemat biaya jangka panjang bagi petani lokal.",
+                    "C. Batalkan proyek karena tidak ada teknologi yang sempurna.",
+                    "D. Memaksa menggunakan jaringan kabel UTP sepanjang 10 km.",
+                    "E. Menggunakan koneksi Bluetooth jarak pendek 10 meter saja."
+                ],
+                answer: 1, // B
+                explanation: "Di wilayah terpencil tanpa coverage seluler, teknologi LoRaWAN memberikan evaluasi manfaat tertinggi (jarak jauh, independen jaringan seluler)."
+            },
+            {
+                id: 33,
+                bloom: "C6",
+                diff: "Sukar",
+                question: "Rancanglah sebuah kerangka strategi komersialisasi terpadu untuk produk inovasi 'Alat Deteksi Kebocoran Gas LPG Terintegrasi Aplikasi WhatsApp dan Sirine Alarm' karya siswa SMK agar sukses masuk pasar UMKM Kuliner!",
+                options: [
+                    "A. Langsung menjual dengan harga sangat tinggi agar terkesan produk kemewahan import.",
+                    "B. Melakukan bundling paket instalasi gratis, kemitraan dengan asosiasi pedagang makanan, serta penyediaan garansi ganti unit 1 tahun.",
+                    "C. Menjual alat dalam bentuk komponen terpisah yang harus dirakit sendiri oleh pedagang makanan.",
+                    "D. Mengandalkan promosi mulut ke mulut saja tanpa membuat media sosial atau brosur teknis.",
+                    "E. Menjual paten alat ke perusahaan asing tanpa memproduksi di dalam negeri."
+                ],
+                answer: 1, // B
+                explanation: "Menciptakan (C6) strategi terpadu melibatkan value proposition (bundling instalasi, kemitraan asosiasi, garansi) yang menjawab ketakutan target pasar UMKM."
+            },
+            {
+                id: 34,
+                bloom: "C4",
+                diff: "Sukar",
+                question: "Data statistik garansi menunjukkan dari 500 unit catu daya (Power Supply) variabel yang terjual, 12% mengalami kerusakan pada IC Regulator LM317 dalam kurun waktu 1 bulan. Hasil penelusuran menemukan suhu heat sink mencapai 85°C saat beban penuh. Analisis penyebab kegagalan desain ini adalah...",
+                options: [
+                    "A. Pemilihan potensiometer yang tidak presisi.",
+                    "B. Luas penampang Heat Sink tidak memadai untuk disipasi panas maksimum, atau kurangnya kipas pendingin aktif.",
+                    "C. Tegangan input AC terlalu stabil.",
+                    "D. Kebocoran arus pada LED indikator daya.",
+                    "E. Penggunaan kabel steker yang terlalu tebal."
+                ],
+                answer: 1, // B
+                explanation: "Suhu 85°C pada IC regulator mengindikasikan keteledoran dalam perhitungan thermal resistance dan luas permukaan pendingin (heatsink)."
+            },
+            {
+                id: 35,
+                bloom: "C5",
+                diff: "Sukar",
+                question: "Sebuah perusahaan start-up alat kesehatan elektronik ingin mengevaluasi dua pilihan pemasok komponen sensor detak jantung: Pemasok A (Harga Rp 15.000/pcs, tingkat cacat 5%, pengiriman 3 hari) vs Pemasok B (Harga Rp 22.000/pcs, tingkat cacat 0.1%, pengiriman 14 hari). Untuk menjaga reputasi komersial produk medis bernilai tinggi, rekomendasi keputusan yang paling rasional adalah...",
+                options: [
+                    "A. Pemasok A karena harga paling murah sehingga keuntungan maksimal.",
+                    "B. Pemasok B karena keandalan (tingkat cacat rendah) sangat krusial bagi keselamatan produk medis, dengan manajemen stok untuk mengatasi waktu kirim.",
+                    "C. Membeli dari kedua pemasok lalu dicampur aduk saat perakitan.",
+                    "D. Menjual alat tanpa sensor detak jantung.",
+                    "E. Menghentikan produksi hingga ada pemasok lokal yang seharga Rp 5.000."
+                ],
+                answer: 1, // B
+                explanation: "Pada produk medis, evaluasi kualitas/keandalan (defect rate rendah) mengalahkan efisiensi biaya kecil demi mencegah kegagalan fatal dan kejatuhan reputasi."
+            },
+            {
+                id: 36,
+                bloom: "C6",
+                diff: "Sukar",
+                question: "Bagaimana Anda merumuskan ide inovasi produk berbasis elektronik untuk mengatasi masalah limbah sampah elektronik (e-waste) yang menumpuk di lingkungan sekolah/masyarakat?",
+                options: [
+                    "A. Membuang seluruh limbah elektronik ke sungai agar bersih.",
+                    "B. Merancang program 'Upcycling E-Waste' dengan memilah komponen pasif/aktif bekas layak pakai untuk dijadikan kit edukasi elektronik murah.",
+                    "C. Membakar semua limbah elektronik di halaman belakang sekolah.",
+                    "D. Mengumpulkan limbah dan menyimpannya di gudang tanpa diolah.",
+                    "E. Melarang siswa membawa perangkat elektronik ke sekolah."
+                ],
+                answer: 1, // B
+                explanation: "Menciptakan (C6) solusi sirkular ekonomi: mendaur ulang/upcycling komponen elektronik bekas layak pakai menjadi produk baru bermakna edukatif."
+            },
+            {
+                id: 37,
+                bloom: "C4",
+                diff: "Sukar",
+                question: "Sebuah sistem Peringatan Dini Banjir berbasis sensor ultrasonik sering memberikan laporan alarm palsu (false alarm) saat ada dedaunan atau burung yang melintas di bawah sensor. Menganalisis masalah tersebut, perbaikan perangkat lunak yang paling efektif adalah...",
+                options: [
+                    "A. Mengganti sensor ultrasonik dengan kamera CCTV super mahal.",
+                    "B. Mengimplementasikan algoritma filtering data (seperti Moving Average Filter) serta delay verifikasi durasi pembacaan.",
+                    "C. Menurunkan tiang sensor hingga menyentuh permukaan air.",
+                    "D. Mematikan fungsi alarm dan menggantinya dengan SMS manual.",
+                    "E. Menambah volume suara sirine menjadi dua kali lipat."
+                ],
+                answer: 1, // B
+                explanation: "Moving Average Filter atau algoritma pemulus data menyaring lonjakan data seketika (noise/burung lewat) sehingga mencegah alarm palsu."
+            },
+            {
+                id: 38,
+                bloom: "C5",
+                diff: "Sukar",
+                question: "Evaluasi efektivitas antara dua metode promosi produk Smart Kunci Rumah: Kampanye Influencer Media Sosial (Biaya Rp 10 Juta, Konversi 50 Penjualan) vs Demo Pameran Properti (Biaya Rp 10 Juta, Konversi 120 Penjualan). Keputusan alokasi anggaran komersialisasi semester depan adalah...",
+                options: [
+                    "A. Mengalihkan mayoritas anggaran ke Pameran Properti karena Cost Per Acquisition (CPA) jauh lebih rendah dan efisien.",
+                    "B. Membagi anggaran sama rata tanpa melihat data konversi.",
+                    "C. Menghentikan semua bentuk promosi dan menunggu pembeli datang sendiri.",
+                    "D. Menggunakan seluruh anggaran untuk menyewa papan reklame di jalan tol.",
+                    "E. Menaikkan harga produk menjadi 5 kali lipat untuk menutup biaya promosi."
+                ],
+                answer: 0, // A
+                explanation: "Pameran Properti menghasilkan 120 penjualan dibanding 50 penjualan dengan biaya sama, yang artinya CPA (biaya per akuisisi) pameran jauh lebih efisien."
+            },
+            {
+                id: 39,
+                bloom: "C6",
+                diff: "Sukar",
+                question: "Anda ditugaskan mendesain sistem evaluasi perbaikan berkelanjutan (Continuous Improvement) pada lini perakitan alat pengukur kadar air tanah. Elemen kombinasi IoT dan Dashboard yang paling tepat dibangun adalah...",
+                options: [
+                    "A. Papan tulis manual di dinding pabrik yang diisi seminggu sekali.",
+                    "B. Integrasi sensor penghitung otomatis di setiap stasion kerja yang terhubung ke Dashboard Real-Time OEE (Overall Equipment Effectiveness) untuk memantau bottleneck.",
+                    "C. Kamera CCTV yang mengawasi pekerja selama 24 jam tanpa analisis data.",
+                    "D. Sistem laporan kertas harian yang ditandatangani secara berjenjang.",
+                    "E. Aplikasi obrolan grup WhatsApp biasa tanpa pencatatan terstruktur."
+                ],
+                answer: 1, // B
+                explanation: "Menciptakan (C6) sistem evaluasi modern memanfaatkan IoT dan Dashboard Real-Time OEE untuk mendeteksi hambatan (bottleneck) produksi secara instan."
+            },
+            {
+                id: 40,
+                bloom: "C4",
+                diff: "Sukar",
+                question: "Hasil pengujian emisi gelombang elektromagnetik (EMC/EMI) pada produk Radio Pemancar FM buatan lokal menunjukkan kegagalan karena mengganggu sinyal komunikasi frekuensi penerbangan lokal. Analisis teknis perbaikan pada tata letak pcb/casing adalah...",
+                options: [
+                    "A. Menambah panjang kabel antena pemancar hingga 100 meter.",
+                    "B. Menambahkan Faraday Shielding (pelindung logam grounded) pada blok osilator dan memasang Low Pass Filter (LPF) pada keluaran RF.",
+                    "C. Mengganti transistor final dengan jenis yang dayanya lebih besar.",
+                    "D. Mengubah warna casing PCB menjadi hitam dop.",
+                    "E. Mengurangi tegangan catu daya menjadi setengahnya."
+                ],
+                answer: 1, // B
+                explanation: "Interferensi emisi elektromagnetik (EMI) diatasi dengan perisai logam (shielding) yang di-ground-kan serta filter LPF untuk menekan harmonisa frekuensi liar."
+            },
+            {
+                id: 41,
+                bloom: "C5",
+                diff: "Sukar",
+                question: "Dalam upaya komersialisasi produk Smart Agriculture di wilayah dengan koneksi listrik sering padam, dilakukan evaluasi 3 skema power supply: (1) Dry Battery biasa, (2) Akkumuator Lead-Acid + Solar Panel, (3) Superkapasitor + Baterai Lithium + Solar Panel. Pilihan (3) dinilai paling unggul karena...",
+                options: [
+                    "A. Paling murah dan paling ringan dibanding pilihan lainnya.",
+                    "B. Mengombinasikan umur pakai lithium yang panjang, pengisian cepat superkapasitor, dan kemandirian energi terbarukan solar panel.",
+                    "C. Mudah terbakar jika kena air hujan.",
+                    "D. Tidak memerlukan modul charging controller sama sekali.",
+                    "E. Komponennya dapat dibeli di toko kelontong desa."
+                ],
+                answer: 1, // B
+                explanation: "Pilihan 3 menggabungkan kepadatan energi lithium, kesiapan pengisian cepat superkapasitor, serta sustainability dari panel surya."
+            },
+            {
+                id: 42,
+                bloom: "C6",
+                diff: "Sukar",
+                question: "Buatlah model bisnis komersialisasi berkonsep 'Product-as-a-Service' (PaaS) untuk produk sistem pelacak GPS Kendaraan bermotor hasil karya TEI SMK!",
+                options: [
+                    "A. Menjual modul GPS lepas dengan harga mahal tanpa layanan pendukung.",
+                    "B. Menyediakan unit GPS secara gratis/biaya murah, dan mengenakan biaya langganan bulanan untuk akses aplikasi pemantauan cloud & fitur keamanan server.",
+                    "C. Menjual petunjuk cara pembuatan GPS dalam bentuk buku cetak.",
+                    "D. Membuka bengkel servis keliling khusus las rangka motor.",
+                    "E. Menyewakan kendaraan yang sudah terpasang GPS ke luar negeri."
+                ],
+                answer: 1, // B
+                explanation: "Model bisnis PaaS berfokus pada pendapatan berulang (recurring revenue) dengan menjual akses layanan/software berlangganan, bukan sekadar unit hardware."
+            },
+            {
+                id: 43,
+                bloom: "C4",
+                diff: "Sukar",
+                question: "Analisis dampak jika sebuah perusahaan start-up perangkat keras elektronik mengabaikan pengujian Sertifikasi Keselamatan Kelistrikan (Safety Test) sebelum melakukan penjualan massal...",
+                options: [
+                    "A. Perusahaan akan menghemat biaya 100% dan pasti sukses besar.",
+                    "B. Risiko terjadinya korsleting/kebakaran pada konsumen yang berujung gugatan hukum fatal, penarikan produk (recall), dan kebangkrutan merk.",
+                    "C. Produk akan dipuji oleh pemerintah karena berani berinovasi cepat.",
+                    "D. Komponen dalam produk akan bertahan hidup lebih lama.",
+                    "E. Konsumen akan memperbaiki sendiri jika produk terbakar."
+                ],
+                answer: 1, // B
+                explanation: "Mengabaikan standar keselamatan berisiko memicu kecelakaan fatal bagi konsumen yang dapat berujung pada kebangkrutan bisnis dan sanksi pidana."
+            },
+            {
+                id: 44,
+                bloom: "C5",
+                diff: "Sukar",
+                question: "Sebuah unit inkubator bisnis SMK menguji 2 desain sistem antrean otomatis: Desain A menggunakan layar TV LCD besar + PC desktop (biaya Rp 6 Juta, konsumsi listrik 150W). Desain B menggunakan Running Text LED + Mikrokontroler (biaya Rp 1.5 Juta, konsumsi listrik 15W). Jika kriteria penilaian difokuskan pada keterjangkauan harga pasar Puskesmas daerah, maka keputusannya adalah...",
+                options: [
+                    "A. Menolak kedua desain dan membuat proyek baru.",
+                    "B. Mengembangkan Desain B karena biaya produksi rendah dan hemat energi, sangat cocok dengan anggaran Puskesmas daerah.",
+                    "C. Memilih Desain A agar terlihat paling canggih walaupun tidak terbeli.",
+                    "D. Menggabungkan Desain A dan B sehingga harganya menjadi Rp 7.5 Juta.",
+                    "E. Menjual Desain A ke pasar internasional saja."
+                ],
+                answer: 1, // B
+                explanation: "Evaluasi berdasarkan segmentasi target (Puskesmas daerah) yang sensitif harga & operasional menunjuk Desain B sebagai pilihan terbaik."
+            },
+            {
+                id: 45,
+                bloom: "C6",
+                diff: "Sukar",
+                question: "Bagaimana merancang rantai pasok (Supply Chain) yang tangguh bagi usaha pembuatan modul trainer elektronika SMK saat menghadapi krisis kelangkaan cip mikrokontroler global?",
+                options: [
+                    "A. Pasrah dan menutup usaha hingga krisis selesai.",
+                    "B. Merancang PCB multi-footprint (dapat dipasang beberapa varian mikro alternatif) serta membangun kemitraan distributor resmi lintas negara.",
+                    "C. Membeli cip tiruan ilegal yang tidak teruji kualitasnya.",
+                    "D. Mengubah produk trainer elektronik menjadi trainer pertukangan kayu.",
+                    "E. Menarik kembali produk yang sudah terjual di sekolah lain."
+                ],
+                answer: 1, // B
+                explanation: "Menciptakan (C6) ketahanan rantai pasok: merancang fleksibilitas hardware (multi-footprint PCB) agar kompatibel dengan berbagai alternatif mikro yang tersedia."
+            },
+            {
+                id: 46,
+                bloom: "C4",
+                diff: "Sukar",
+                question: "Data pengujian daya tahan (stress test) pada 100 unit rangkaian inverter daya menunjukkan bahwa pada suhu kerja 60°C, nilai efisiensi turun dari 92% menjadi 74%. Komponen yang paling mungkin menjadi penyebab penurunan efisiensi drastis ini adalah...",
+                options: [
+                    "A. Resistor konstan film karbon 1/4 watt.",
+                    "B. Transistor MOSFET dengan RDS(on) tinggi saat panas dan ketiadaan sistem kompensasi termal.",
+                    "C. Tombol sakelar mekanis ON/OFF.",
+                    "D. Kabel jumper tembaga murni.",
+                    "E. Lampu indikator LED warna hijau."
+                ],
+                answer: 1, // B
+                explanation: "MOSFET memiliki resistansi internal RDS(on) yang meningkat seiring kenaikan suhu, menyebabkan rugi-rugi daya (heat dissipation) membesar dan efisiensi drop."
+            },
+            {
+                id: 47,
+                bloom: "C5",
+                diff: "Sukar",
+                question: "Sebuah inovasi sistem pakan ikan otomatis berbasis timer dinilai kurang komersial di mata investor karena 'terlalu umum'. Strategi pertambahan nilai (Value Added) yang paling tepat direkomendasikan agar produk ini dinilai tinggi adalah...",
+                options: [
+                    "A. Mengubah warna box penampung pakan menjadi warna emas.",
+                    "B. Mengintegrasikan algoritma pemberian pakan berbasis bobot ikan terestimasi sensor berat & pemantauan nafsu makan via kamera AI.",
+                    "C. Menjual pakan ikannya saja tanpa menjual alatnya.",
+                    "D. Menambahkan speaker musik untuk menghibur ikan.",
+                    "E. Mengurangi kapasitas wadah pakan menjadi 100 gram."
+                ],
+                answer: 1, // B
+                explanation: "Menambahkan kecerdasan buatan (AI) dan sensor terintegrasi menaikkan derajat inovasi dari sekadar timer biasa menjadi Smart Aquaculture bernilai jual tinggi."
+            },
+            {
+                id: 48,
+                bloom: "C6",
+                diff: "Sukar",
+                question: "Guna merealisasikan prinsip keberlanjutan (Sustainability) dalam industri komersial elektronika, buatlah rencana penerapan Green Electronics pada tahapan manufaktur!",
+                options: [
+                    "A. Menggunakan timah solder beracun timbal tinggi agar murah.",
+                    "B. Menggunakan timah solder bebas timbal (Lead-Free/RoHS standard), bahan PCB biodegradable, dan desain modular agar mudah diperbaiki/didaur ulang.",
+                    "C. Menggunakan kemasan plastik sekali pakai yang tebal.",
+                    "D. Mengencerkan limbah asam etsa PCB langsung ke saluran air warga.",
+                    "E. Lem seluruh bagian casing agar perangkat tidak bisa dibuka atau diperbaiki."
+                ],
+                answer: 1, // B
+                explanation: "Prinsip Green Electronics meliputi standar RoHS (Lead-Free), kemudahan repairability/modular, serta pengolahan limbah etsa yang ramah lingkungan."
+            },
+            {
+                id: 49,
+                bloom: "C4",
+                diff: "Sukar",
+                question: "Dalam proyek otomatisasi pendingin gudang, sensor suhu DHT11 sering mengalami kerusakan (error reading) setelah 2 minggu dipasang di lingkungan lembap 90% RH. Analisis akar masalah teknis ini adalah...",
+                options: [
+                    "A. Sensor DHT11 dirancang untuk kelas konsumen hemat biaya dan tidak tahan paparan kelembapan tinggi terus menerus; solusinya ganti ke sensor kelas industri (seperti SHT30/SHT31).",
+                    "B. Mikrokontroler terlalu dingin sehingga membeku.",
+                    "C. Kabel data kurang panjang.",
+                    "D. Kecepatan kipas gudang terlalu kencang.",
+                    "E. Catu daya 5V terlalu murni tanpa noise."
+                ],
+                answer: 0, // A
+                explanation: "Sensor DHT11 adalah sensor entry-level yang cepat mengalami degradasi pada lingkungan ekstrem/jenuh kelembapan tinggi. Solusinya mengganti dengan sensor industrial-grade."
+            },
+            {
+                id: 50,
+                bloom: "C5",
+                diff: "Sukar",
+                question: "Sebuah perusahaan rintisan elektronika memiliki sisa anggaran modal Rp 50 Juta. Evaluasi 2 pilihan investasi untuk kelanjutan bisnis: Pilihan X (Membeli mesin CNC PCB router sendiri untuk perakitan cepat) vs Pilihan Y (Sewa jasa pabrikasi PCB profesional luar & fokuskan dana pada pemasaran komersial). Jika tujuan utama adalah penetrasi pasar cepat 1.000 unit pertama, keputusan terbaik adalah...",
+                options: [
+                    "A. Pilihan X, karena memiliki mesin sendiri selalu lebih keren.",
+                    "B. Pilihan Y, karena menyerahkan manufaktur ke pabrikan profesional menghasilkan mutu tinggi & sisa dana fokus memenangkan penetrasi pasar.",
+                    "C. Membagi modal untuk jalan-jalan direksi start-up.",
+                    "D. Membeli aset kripto untuk spekulasi modal.",
+                    "E. Membatalkan semua rencana dan membagikan uang ke pemegang saham."
+                ],
+                answer: 1, // B
+                explanation: "Dalam fase penetrasi pasar, outsourcing manufaktur ke fabless profesional menjaga standar mutu stabil, sementara kapital difokuskan pada pemasaran dan akuisisi pelanggan."
+            }
+        ];
+
+        // CBT STATE MANAGEMENT
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(50).fill(null);
+        let doubtfulAnswers = new Array(50).fill(false);
+        let examTimer = null;
+        let timeRemaining = 120 * 60; // 120 Minutes in seconds
+        let isExamActive = false;
+
+        // INITIALIZATION
+        window.onload = function() {
+            lucide.createIcons();
+            renderBankSoal();
+            initQuestionGrid();
+            
+            // Setup Mobile Menu Toggle
+            document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+                const menu = document.getElementById('mobile-menu');
+                menu.classList.toggle('hidden');
+            });
+
+            // Show Login Modal by default if no user logged in
+            showLoginModal();
+        };
+
+        // AUTHENTICATION LOGIC
+        function showLoginModal() {
+            document.getElementById('login-modal').classList.remove('hidden');
+        }
+
+        function setLoginRole(role) {
+            currentLoginRoleTab = role;
+            const tabSiswa = document.getElementById('role-tab-siswa');
+            const tabAdmin = document.getElementById('role-tab-admin');
+            const formSiswa = document.getElementById('form-login-siswa');
+            const formAdmin = document.getElementById('form-login-admin');
+
+            if (role === 'siswa') {
+                tabSiswa.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-white shadow text-brand-600';
+                tabAdmin.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900';
+                formSiswa.classList.remove('hidden');
+                formAdmin.classList.add('hidden');
+            } else {
+                tabAdmin.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-white shadow text-amber-600';
+                tabSiswa.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900';
+                formAdmin.classList.remove('hidden');
+                formSiswa.classList.add('hidden');
+            }
+        }
+
+        function handleLoginSiswa(e) {
+            e.preventDefault();
+            const name = document.getElementById('siswa-name').value;
+            const nisn = document.getElementById('siswa-nisn').value;
+            const kelas = document.getElementById('siswa-kelas').value;
+
+            currentUser = {
+                name: name,
+                nisn: nisn,
+                kelas: kelas,
+                role: 'siswa'
+            };
+
+            updateUserUI();
+            document.getElementById('login-modal').classList.add('hidden');
+            switchTab('exam');
+        }
+
+        function handleLoginAdmin(e) {
+            e.preventDefault();
+            const un = document.getElementById('admin-username').value;
+            const pw = document.getElementById('admin-password').value;
+
+            if (un === 'admin' && pw === 'admin123') {
+                currentUser = {
+                    name: 'Administrator Guru',
+                    role: 'admin'
+                };
+                document.getElementById('admin-login-error').classList.add('hidden');
+                updateUserUI();
+                document.getElementById('login-modal').classList.add('hidden');
+                switchTab('admin');
+            } else {
+                document.getElementById('admin-login-error').classList.remove('hidden');
+            }
+        }
+
+        function updateUserUI() {
+            if (!currentUser) return;
+
+            document.getElementById('user-profile-badge').classList.remove('hidden');
+            document.getElementById('btn-login-modal').classList.add('hidden');
+            document.getElementById('btn-logout').classList.remove('hidden');
+
+            document.getElementById('user-display-name').textContent = currentUser.name;
+            document.getElementById('user-display-role').textContent = currentUser.role === 'admin' ? 'Administrator' : `Siswa (${currentUser.kelas})`;
+            document.getElementById('user-avatar font-bold').textContent = currentUser.name.charAt(0).toUpperCase();
+
+            document.getElementById('mobile-user-name').textContent = currentUser.name;
+            document.getElementById('mobile-login-btn').classList.add('hidden');
+
+            // Show Admin Nav if Admin
+            const adminNav = document.getElementById('nav-admin');
+            const mobileAdminNav = document.getElementById('mobile-nav-admin');
+            if (currentUser.role === 'admin') {
+                adminNav.classList.remove('hidden');
+                mobileAdminNav.classList.remove('hidden');
+                updateAdminStats();
+            } else {
+                adminNav.classList.add('hidden');
+                mobileAdminNav.classList.add('hidden');
+                
+                // Set active student banner info
+                const activeInfo = document.getElementById('active-student-info');
+                activeInfo.classList.remove('hidden');
+                activeInfo.textContent = `Peserta: ${currentUser.name} | NISN: ${currentUser.nisn} | Kelas: ${currentUser.kelas}`;
+            }
+        }
+
+        function logoutUser() {
+            if (isExamActive) {
+                if (!confirm('Ujian sedang berlangsung! Keluar akan menghentikan ujian. Lanjutkan?')) return;
+                resetExamState();
+            }
+            currentUser = null;
+            document.getElementById('user-profile-badge').classList.add('hidden');
+            document.getElementById('btn-login-modal').classList.remove('hidden');
+            document.getElementById('btn-logout').classList.add('hidden');
+            document.getElementById('nav-admin').classList.add('hidden');
+            document.getElementById('mobile-nav-admin').classList.add('hidden');
+            document.getElementById('active-student-info').classList.add('hidden');
+            
+            showLoginModal();
+        }
+
+        // NAVIGATION TABS
+        function switchTab(tabName) {
+            // Guard admin tab
+            if (tabName === 'admin' && (!currentUser || currentUser.role !== 'admin')) {
+                alert('Akses Dibatasi! Halaman Admin hanya untuk Pengajar/Guru.');
+                showLoginModal();
+                setLoginRole('admin');
+                return;
+            }
+
+            // Hide all tabs
+            document.getElementById('tab-exam').classList.add('hidden');
+            document.getElementById('tab-bank').classList.add('hidden');
+            document.getElementById('tab-rubric').classList.add('hidden');
+            document.getElementById('tab-admin').classList.add('hidden');
+
+            // Reset Nav Styles
+            const navs = ['exam', 'bank', 'rubric', 'admin'];
+            navs.forEach(nav => {
+                const el = document.getElementById(`nav-${nav}`);
+                if (el) {
+                    el.classList.remove('bg-brand-600', 'text-white');
+                    el.classList.add('text-slate-300', 'hover:text-white', 'hover:bg-slate-800');
+                }
+            });
+
+            // Active Target
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+            const activeNav = document.getElementById(`nav-${tabName}`);
+            if (activeNav) {
+                activeNav.classList.remove('text-slate-300', 'hover:text-white', 'hover:bg-slate-800');
+                activeNav.classList.add('bg-brand-600', 'text-white');
+            }
+
+            // Close mobile menu if open
+            document.getElementById('mobile-menu').classList.add('hidden');
+        }
+
+        // CBT EXAM ENGINE
+        function startOrResetExam() {
+            if (!currentUser || currentUser.role !== 'siswa') {
+                alert('Silakan Login sebagai Peserta Siswa terlebih dahulu untuk memulai ujian!');
+                showLoginModal();
+                return;
+            }
+
+            const btn = document.getElementById('btn-toggle-exam');
+            const workspace = document.getElementById('cbt-workspace');
+            const resultDash = document.getElementById('exam-result');
+
+            if (!isExamActive) {
+                // Start Exam
+                isExamActive = true;
+                btn.textContent = 'Hentikan Ujian';
+                btn.classList.replace('bg-brand-600', 'bg-rose-600');
+                btn.classList.replace('hover:bg-brand-700', 'hover:bg-rose-700');
+                
+                workspace.classList.remove('hidden');
+                resultDash.classList.add('hidden');
+
+                // Timer setup
+                timeRemaining = 120 * 60;
+                startTimer();
+                
+                currentQuestionIndex = 0;
+                loadQuestion(currentQuestionIndex);
+                updateQuestionGrid();
+            } else {
+                // Reset / Abort
+                if (confirm('Apakah Anda yakin ingin menghentikan simulasi ujian ini? Seluruh kemajuan akan dihapus.')) {
+                    resetExamState();
+                }
+            }
+        }
+
+        function finishExam() {
+            if (!confirm('Apakah Anda yakin ingin mengumpulkan jawaban ujian ini?')) {
+                return;
+            }
+
+            clearInterval(examTimer);
+            isExamActive = false;
+
+            // Calculate Score
+            let correctCount = 0;
+            questionsData.forEach((q, idx) => {
+                if (userAnswers[idx] === q.answer) {
+                    correctCount++;
+                }
+            });
+
+            const totalScore = (correctCount / questionsData.length) * 100;
+            const wrongCount = questionsData.length - correctCount;
+
+            // Predicate
+            let predicate = '';
+            if (totalScore >= 88) predicate = 'A (Sangat Baik)';
+            else if (totalScore >= 75) predicate = 'B (Baik)';
+            else if (totalScore >= 65) predicate = 'C (Cukup)';
+            else predicate = 'D (Perlu Bimbingan)';
+
+            // Record to Admin Result List
+            if (currentUser) {
+                studentExamResults.push({
+                    name: currentUser.name,
+                    nisn: currentUser.nisn,
+                    kelas: currentUser.kelas,
+                    score: totalScore.toFixed(0),
+                    correct: correctCount,
+                    predicate: predicate,
+                    time: new Date().toLocaleTimeString()
+                });
+            }
+
+            // Display Results
+            document.getElementById('cbt-workspace').classList.add('hidden');
+            document.getElementById('exam-result').classList.remove('hidden');
+
+            document.getElementById('result-score').textContent = totalScore.toFixed(0);
+            document.getElementById('result-correct').textContent = `${correctCount} / ${questionsData.length}`;
+            document.getElementById('result-wrong').textContent = `${wrongCount} / ${questionsData.length}`;
+            document.getElementById('result-predicate').textContent = predicate;
+
+            // Reset Toggle Btn
+            const btn = document.getElementById('btn-toggle-exam');
+            btn.textContent = 'Ulangi Simulasi Ujian';
+            btn.classList.replace('bg-rose-600', 'bg-brand-600');
+        }
+
+        // ADMIN FUNCTIONS
+        function openAddQuestionModal() {
+            document.getElementById('add-q-modal').classList.remove('hidden');
+        }
+
+        function closeAddQuestionModal() {
+            document.getElementById('add-q-modal').classList.add('hidden');
+        }
+
+        function handleCreateQuestion(e) {
+            e.preventDefault();
+            const bloom = document.getElementById('new-q-bloom').value;
+            const diff = document.getElementById('new-q-diff').value;
+            const text = document.getElementById('new-q-text').value;
+            const key = parseInt(document.getElementById('new-q-key').value);
+            const exp = document.getElementById('new-q-exp').value;
+
+            const opts = [
+                `A. ${document.getElementById('new-opt-a').value}`,
+                `B. ${document.getElementById('new-opt-b').value}`,
+                `C. ${document.getElementById('new-opt-c').value}`,
+                `D. ${document.getElementById('new-opt-d').value}`,
+                `E. ${document.getElementById('new-opt-e').value}`
+            ];
+
+            const newQ = {
+                id: questionsData.length + 1,
+                bloom: bloom,
+                diff: diff,
+                question: text,
+                options: opts,
+                answer: key,
+                explanation: exp
+            };
+
+            questionsData.push(newQ);
+            userAnswers.push(null);
+            doubtfulAnswers.push(false);
+
+            alert('Soal baru berhasil ditambahkan ke Bank Soal!');
+            closeAddQuestionModal();
+            renderBankSoal();
+            initQuestionGrid();
+            updateAdminStats();
+        }
+
+        function updateAdminStats() {
+            document.getElementById('stat-total-q').textContent = questionsData.length;
+            document.getElementById('stat-total-students').textContent = studentExamResults.length;
+
+            if (studentExamResults.length > 0) {
+                const avg = studentExamResults.reduce((acc, curr) => acc + parseFloat(curr.score), 0) / studentExamResults.length;
+                document.getElementById('stat-avg-score').textContent = avg.toFixed(1);
+
+                // Populate Table
+                const tableBody = document.getElementById('admin-results-table');
+                tableBody.innerHTML = '';
+                studentExamResults.forEach(res => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="px-4 py-2.5 font-bold text-slate-900">${res.name}</td>
+                        <td class="px-4 py-2.5">${res.nisn}</td>
+                        <td class="px-4 py-2.5">${res.kelas}</td>
+                        <td class="px-4 py-2.5 font-semibold text-emerald-600">${res.correct} Soal</td>
+                        <td class="px-4 py-2.5 font-bold text-brand-600">${res.score}</td>
+                        <td class="px-4 py-2.5">${res.predicate}</td>
+                        <td class="px-4 py-2.5 text-slate-400 text-xs">${res.time}</td>
+                    `;
+                    tableBody.appendChild(tr);
+                });
+            }
+        }
+
+        function resetExamState() {
+            isExamActive = false;
+            clearInterval(examTimer);
+            document.getElementById('timer-display').textContent = "120:00";
+            
+            const btn = document.getElementById('btn-toggle-exam');
+            btn.textContent = 'Mulai Ujian';
+            btn.classList.replace('bg-rose-600', 'bg-brand-600');
+            btn.classList.replace('hover:bg-rose-700', 'hover:bg-brand-700');
+
+            document.getElementById('cbt-workspace').classList.add('hidden');
+            userAnswers.fill(null);
+            doubtfulAnswers.fill(false);
+            updateQuestionGrid();
+        }
+
+        function startTimer() {
+            clearInterval(examTimer);
+            examTimer = setInterval(() => {
+                timeRemaining--;
+                if (timeRemaining <= 0) {
+                    clearInterval(examTimer);
+                    alert('Waktu ujian telah habis!');
+                    finishExam();
+                    return;
+                }
+                const minutes = Math.floor(timeRemaining / 60);
+                const seconds = timeRemaining % 60;
+                document.getElementById('timer-display').textContent = 
+                    `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function loadQuestion(index) {
+            currentQuestionIndex = index;
+            const q = questionsData[index];
+
+            document.getElementById('current-q-num').textContent = index + 1;
+            document.getElementById('question-text').textContent = `${index + 1}. ${q.question}`;
+            
+            // Badges
+            document.getElementById('q-bloom-badge').textContent = `Bloom: ${q.bloom}`;
+            document.getElementById('q-diff-badge').textContent = `Tingkat: ${q.diff}`;
+
+            // Checkbox Doubtful
+            document.getElementById('doubtful-check').checked = doubtfulAnswers[index];
+
+            // Render Options
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            q.options.forEach((optText, optIdx) => {
+                const isSelected = userAnswers[index] === optIdx;
+                const optBtn = document.createElement('button');
+                optBtn.className = `w-full text-left p-3.5 rounded-lg border text-sm font-medium transition-all flex items-start space-x-3 ${
+                    isSelected 
+                        ? 'border-brand-600 bg-brand-50 text-brand-900 ring-2 ring-brand-500/20' 
+                        : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+                }`;
+                optBtn.onclick = () => selectOption(optIdx);
+
+                optBtn.innerHTML = `
+                    <div class="w-5 h-5 rounded-full border ${isSelected ? 'border-brand-600 bg-brand-600 text-white' : 'border-slate-300'} flex items-center justify-center text-xs mt-0.5 flex-shrink-0">
+                        ${isSelected ? '✓' : String.fromCharCode(65 + optIdx)}
+                    </div>
+                    <span class="flex-grow">${optText}</span>
+                `;
+                container.appendChild(optBtn);
+            });
+
+            // Update Prev/Next State
+            document.getElementById('btn-prev').disabled = index === 0;
+            document.getElementById('btn-next').disabled = index === questionsData.length - 1;
+
+            updateQuestionGrid();
+        }
+
+        function selectOption(optionIndex) {
+            userAnswers[currentQuestionIndex] = optionIndex;
+            loadQuestion(currentQuestionIndex);
+        }
+
+        function toggleDoubtful() {
+            doubtfulAnswers[currentQuestionIndex] = document.getElementById('doubtful-check').checked;
+            updateQuestionGrid();
+        }
+
+        function navigateQuestion(step) {
+            const target = currentQuestionIndex + step;
+            if (target >= 0 && target < questionsData.length) {
+                loadQuestion(target);
+            }
+        }
+
+        function initQuestionGrid() {
+            const grid = document.getElementById('question-grid');
+            grid.innerHTML = '';
+
+            for (let i = 0; i < 50; i++) {
+                const btn = document.createElement('button');
+                btn.id = `grid-btn-${i}`;
+                btn.className = 'h-9 w-full rounded font-semibold text-xs transition-all flex items-center justify-center border border-slate-200 bg-slate-100 text-slate-600';
+                btn.textContent = i + 1;
+                btn.onclick = () => {
+                    if (isExamActive) loadQuestion(i);
+                };
+                grid.appendChild(btn);
+            }
+        }
+
+        function updateQuestionGrid() {
+            for (let i = 0; i < 50; i++) {
+                const btn = document.getElementById(`grid-btn-${i}`);
+                if (!btn) continue;
+
+                const isCurrent = i === currentQuestionIndex && isExamActive;
+                const isAnswered = userAnswers[i] !== null;
+                const isDoubt = doubtfulAnswers[i];
+
+                btn.className = 'h-9 w-full rounded font-bold text-xs transition-all flex items-center justify-center border ';
+
+                if (isCurrent) {
+                    btn.classList.add('ring-2', 'ring-slate-900', 'ring-offset-1');
+                }
+
+                if (isDoubt) {
+                    btn.classList.add('bg-amber-400', 'text-amber-950', 'border-amber-500');
+                } else if (isAnswered) {
+                    btn.classList.add('bg-brand-600', 'text-white', 'border-brand-700');
+                } else {
+                    btn.classList.add('bg-slate-100', 'text-slate-600', 'border-slate-200', 'hover:bg-slate-200');
+                }
+            }
+        }
+
+        function finishExam() {
+            if (!confirm('Apakah Anda yakin ingin mengumpulkan jawaban ujian ini?')) {
+                return;
+            }
+
+            clearInterval(examTimer);
+            isExamActive = false;
+
+            // Calculate Score
+            let correctCount = 0;
+            questionsData.forEach((q, idx) => {
+                if (userAnswers[idx] === q.answer) {
+                    correctCount++;
+                }
+            });
+
+            const totalScore = (correctCount / 50) * 100;
+            const wrongCount = 50 - correctCount;
+
+            // Predicate
+            let predicate = '';
+            if (totalScore >= 88) predicate = 'A (Sangat Baik)';
+            else if (totalScore >= 75) predicate = 'B (Baik)';
+            else if (totalScore >= 65) predicate = 'C (Cukup)';
+            else predicate = 'D (Perlu Bimbingan)';
+
+            // Display Results
+            document.getElementById('cbt-workspace').classList.add('hidden');
+            document.getElementById('exam-result').classList.remove('hidden');
+
+            document.getElementById('result-score').textContent = totalScore.toFixed(0);
+            document.getElementById('result-correct').textContent = `${correctCount} / 50`;
+            document.getElementById('result-wrong').textContent = `${wrongCount} / 50`;
+            document.getElementById('result-predicate').textContent = predicate;
+
+            // Reset Toggle Btn
+            const btn = document.getElementById('btn-toggle-exam');
+            btn.textContent = 'Ulangi Simulasi Ujian';
+            btn.classList.replace('bg-rose-600', 'bg-brand-600');
+        }
+
+        // RENDER BANK SOAL & Ulasan Pembahasan
+        function renderBankSoal() {
+            const container = document.getElementById('bank-soal-list');
+            if (!container) return;
+
+            const bloomElem = document.getElementById('filter-bloom');
+            const diffElem = document.getElementById('filter-diff');
+
+            const bloomFilter = bloomElem ? bloomElem.value : 'ALL';
+            const diffFilter = diffElem ? diffElem.value : 'ALL';
+
+            container.innerHTML = '';
+
+            const filtered = questionsData.filter(q => {
+                let matchBloom = true;
+                let matchDiff = true;
+
+                if (bloomFilter === 'C2') matchBloom = q.bloom === 'C2';
+                else if (bloomFilter === 'C3') matchBloom = q.bloom === 'C3';
+                else if (bloomFilter === 'C4-C6') matchBloom = ['C4', 'C5', 'C6'].includes(q.bloom);
+
+                if (diffFilter !== 'ALL') matchDiff = q.diff === diffFilter;
+
+                return matchBloom && matchDiff;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 bg-white rounded-xl border border-slate-200">
+                        <i data-lucide="search-x" class="w-10 h-10 text-slate-400 mx-auto mb-2"></i>
+                        <p class="text-slate-500 font-medium text-sm">Tidak ada soal yang cocok dengan filter yang dipilih.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            filtered.forEach((q) => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-4';
+
+                // Difficulty color badge
+                let diffColor = 'bg-emerald-100 text-emerald-700';
+                if (q.diff === 'Sedang') diffColor = 'bg-amber-100 text-amber-700';
+                if (q.diff === 'Sukar') diffColor = 'bg-rose-100 text-rose-700';
+
+                const optionsHTML = q.options.map((opt, optIdx) => {
+                    const isCorrect = optIdx === q.answer;
+                    return `
+                        <div class="p-2.5 rounded-lg text-xs sm:text-sm font-medium border ${
+                            isCorrect 
+                                ? 'bg-emerald-50 border-emerald-300 text-emerald-900 font-semibold' 
+                                : 'bg-slate-50 border-slate-200 text-slate-700'
+                        } flex items-center justify-between">
+                            <span>${opt}</span>
+                            ${isCorrect ? '<span class="text-xs bg-emerald-600 text-white px-2 py-0.5 rounded font-bold">Kunci Jawaban</span>' : ''}
+                        </div>
+                    `;
+                }).join('');
+
+                card.innerHTML = `
+                    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                        <span class="font-bold text-slate-900 text-sm">Soal Nomor ${q.id}</span>
+                        <div class="flex items-center space-x-2 text-xs">
+                            <span class="px-2.5 py-0.5 rounded font-bold bg-slate-100 text-slate-700"> Bloom: ${q.bloom}</span>
+                            <span class="px-2.5 py-0.5 rounded font-bold ${diffColor}">Tingkat: ${q.diff}</span>
+                        </div>
+                    </div>
+
+                    <p class="text-slate-800 text-sm sm:text-base font-medium leading-relaxed">${q.question}</p>
+
+                    <div class="space-y-2 pt-2">
+                        ${optionsHTML}
+                    </div>
+
+                    <!-- Pembahasan / Ulasan -->
+                    <div class="mt-4 pt-4 border-t border-slate-100 bg-brand-50/50 p-3.5 rounded-lg border border-brand-100/60">
+                        <h4 class="text-xs font-bold text-brand-800 uppercase tracking-wider flex items-center mb-1">
+                            <i data-lucide="info" class="w-3.5 h-3.5 mr-1 text-brand-600"></i>Ulasan & Pembahasan Jawaban
+                        </h4>
+                        <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">${q.explanation}</p>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>
